@@ -1,12 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:news_app/components/carousel_slider.dart';
 import 'package:news_app/components/category_tile.dart';
 import 'package:news_app/components/smooth_slider.dart';
 import 'package:news_app/components/trending_news.dart';
+import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
 import 'package:news_app/models/slider_model.dart';
 import 'package:news_app/services/category_data.dart';
+import 'package:news_app/services/news.dart';
 import 'package:news_app/services/slider_data.dart';
 
 class Home extends StatefulWidget {
@@ -19,13 +22,29 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = [];
   List<SliderModel> sliders = [];
+  List <ArticleModel> articles = [];
+
   int activeIndex = 0;
+  bool _isLoading = true;
 
   @override
   void initState() {
     categories = getCategories();
     sliders = getSliders();
+    getNews();
+
     super.initState();
+  }
+
+  getNews() async{
+    News newsClass = News();
+    await newsClass.getNews();
+
+    articles = newsClass.news;
+    setState(() {
+      _isLoading = false;
+    });
+
   }
 
   @override
@@ -50,7 +69,9 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        body: SingleChildScrollView(
+        body:_isLoading ? 
+        Center(child: LoadingAnimationWidget.staggeredDotsWave(color: Colors.blue, size: 65.0)):
+        SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Container(
             child: Column(
@@ -88,8 +109,12 @@ class _HomeState extends State<Home> {
                         "View all",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: Colors.blue),
+                            fontSize: 16,
+                            color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                          decorationColor: Colors.blue,
+                            decorationThickness: 1
+                        ),
                       )
                     ],
                   ),
@@ -139,8 +164,12 @@ class _HomeState extends State<Home> {
                         "View all",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: Colors.blue),
+                            fontSize: 16,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.blue,
+                            decorationThickness: 1
+                        ),
                       )
                     ],
                   ),
@@ -148,18 +177,18 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 10,
                 ),
-                Column(
-                  children: const [
-                    TrendingNews(),
-                    TrendingNews(),
-                    TrendingNews(),
-                    TrendingNews(),
-                    TrendingNews(),
-                  ],
+                Container(
+                  height: 500,
+                  child: ListView.builder(
+                      itemCount: articles.length,
+                      itemBuilder: (context, index){
+                        return TrendingNews(imageUrl: articles[index].urlToImage!, title: articles[index].title!, description: articles[index].description!);
+                      }),
                 )
               ],
             ),
           ),
-        ));
+        )
+    );
   }
 }

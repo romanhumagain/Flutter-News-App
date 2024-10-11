@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TrendingNews extends StatelessWidget {
-  const TrendingNews({super.key});
+  final String imageUrl ;
+  final String title;
+  final String description;
+
+
+  const TrendingNews({super.key, required this.imageUrl, required this.title, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +23,8 @@ class TrendingNews extends StatelessWidget {
               Container(
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/business.jpg',
+                    child: Image.network(
+                      imageUrl,
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
@@ -33,9 +38,9 @@ class TrendingNews extends StatelessWidget {
                   width: MediaQuery.of(context).size.width / 1.7,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        "RUI COSTA outsprints to the breakway yo win state 15",
+                        title,
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 16),
                         maxLines: 3,
@@ -45,7 +50,7 @@ class TrendingNews extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        "Then a final kick to beat lennard kamna",
+                        description,
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 15,
