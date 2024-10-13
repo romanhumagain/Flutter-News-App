@@ -19,8 +19,4 @@ class ArticleModel{
         required this.content
   }
   );
-
-
-
-
 }

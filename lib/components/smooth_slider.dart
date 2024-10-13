@@ -8,7 +8,7 @@ class SmoothSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSmoothIndicator(activeIndex: activeIndex, count: count, effect:SlideEffect(
+    return AnimatedSmoothIndicator(activeIndex: activeIndex, count: 5, effect:SlideEffect(
       activeDotColor: Colors.blue,
       dotWidth: 12,
       dotHeight: 12,

@@ -8,6 +8,7 @@ import 'package:news_app/components/trending_news.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
 import 'package:news_app/models/slider_model.dart';
+import 'package:news_app/pages/all_news.dart';
 import 'package:news_app/services/category_data.dart';
 import 'package:news_app/services/news.dart';
 import 'package:news_app/services/slider_data.dart';
@@ -30,9 +31,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     categories = getCategories();
-    sliders = getSliders();
     getNews();
-
+    getSliderNews();
     super.initState();
   }
 
@@ -44,9 +44,16 @@ class _HomeState extends State<Home> {
     setState(() {
       _isLoading = false;
     });
-
   }
 
+  getSliderNews() async{
+    Sliders slidersNews = Sliders();
+    await slidersNews.getSlidersNews();
+    sliders = slidersNews.sliders;
+    setState(() {
+      _isLoading = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +104,7 @@ class _HomeState extends State<Home> {
                       right: 15.0, left: 15.0, bottom: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         "Breaking News",
                         style: TextStyle(
@@ -105,27 +112,33 @@ class _HomeState extends State<Home> {
                             fontSize: 20,
                             color: Colors.black87),
                       ),
-                      Text(
-                        "View all",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
-                            decorationThickness: 1
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AllNews(newsType: "breaking",)));
+                        },
+                        child: Text(
+                          "View all",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                            decorationColor: Colors.blue,
+                              decorationThickness: 1
+                          ),
                         ),
                       )
                     ],
                   ),
                 ),
                 CarouselSlider.builder(
-                    itemCount: sliders.length,
+                    itemCount: 5,
                     itemBuilder: (context, index, realIndex) {
-                      String? image_name = sliders[index].image;
-                      String? name = sliders[index].name;
+                      String? imageUrl = sliders[index].urlToImage;
+                      String? title = sliders[index].title;
+                      String ? articleUrl = sliders[index].url;
                       return ImageCarouselSlider(
-                          image: image_name!, index: index, name: name!);
+                          imageUrl: imageUrl!, title: title!, articleUrl: articleUrl!);
                     },
                     options: CarouselOptions(
                         height: 240,
@@ -152,7 +165,7 @@ class _HomeState extends State<Home> {
                       right: 15.0, left: 15.0, bottom: 12, top: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         "Trending News",
                         style: TextStyle(
@@ -160,15 +173,20 @@ class _HomeState extends State<Home> {
                             fontSize: 20,
                             color: Colors.black87),
                       ),
-                      Text(
-                        "View all",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.blue,
-                            decorationThickness: 1
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AllNews(newsType: "trending",)));
+                        },
+                        child: Text(
+                          "View all",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.blue,
+                              decorationThickness: 1
+                          ),
                         ),
                       )
                     ],
@@ -182,7 +200,7 @@ class _HomeState extends State<Home> {
                   child: ListView.builder(
                       itemCount: articles.length,
                       itemBuilder: (context, index){
-                        return TrendingNews(imageUrl: articles[index].urlToImage!, title: articles[index].title!, description: articles[index].description!);
+                        return TrendingNews(imageUrl: articles[index].urlToImage!, title: articles[index].title!, description: articles[index].description!, url: articles[index].url!,);
                       }),
                 )
               ],
