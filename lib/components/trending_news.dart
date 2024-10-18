@@ -41,7 +41,7 @@ class TrendingNews extends StatelessWidget {
                   width: 15,
                 ),
                 Expanded(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width / 1.7,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

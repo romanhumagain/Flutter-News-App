@@ -8,7 +8,7 @@ class MyCategoryNewsData extends StatelessWidget {
   final String url;
 
 
-  MyCategoryNewsData(
+  const MyCategoryNewsData(
       {super.key,
       required this.title,
       required this.description,

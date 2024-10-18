@@ -9,7 +9,7 @@ import '../services/slider_data.dart';
 
 class AllNews extends StatefulWidget {
   final String newsType;
-  AllNews({super.key, required this.newsType});
+  const AllNews({super.key, required this.newsType});
 
   @override
   State<AllNews> createState() => _AllNewsState();

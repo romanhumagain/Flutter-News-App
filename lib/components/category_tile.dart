@@ -5,7 +5,7 @@ class CategoryTile extends StatelessWidget {
   final image;
   final categoryName;
 
-  CategoryTile({super.key, required this.image, required this.categoryName});
+  const CategoryTile({super.key, required this.image, required this.categoryName});
 
   @override
   Widget build(BuildContext context) {

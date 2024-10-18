@@ -195,7 +195,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
+                SizedBox(
                   height: 500,
                   child: ListView.builder(
                       itemCount: articles.length,
